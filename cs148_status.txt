@@ -1,4 +1,9 @@
-1 into Assignment-1. Please use Assignment-X for branching of Assignment X
+31: Zhiqiang Sui 
+ 
+ Assignment 1: UNCHECKED 
+ code works properly, but need to create branches (not subdirectories) for individual assignments for completion checks
+ a check can be granted once proper branch is in place 
+ github will translate 'Assignment 1' into 'Assignment-1'. Please use 'Assignment-X' for branching of Assignment X
  branch lables are case sensitive
  
 
