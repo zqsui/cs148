@@ -84,25 +84,6 @@ function my_init() {
     global_spacing = 0.9;  // variables declared with "var" are global
     verti_dis = 0.0
 
-    my_object = {};  // objects can be created with braces
-    my_object.university = "Brown";  // create object property with an assignment
-    my_object.course_number = 148;  
-    my_object["subject"] = "robotics";  
-    if (typeof copied_object === 'undefined') {  // if my_object does not already exist
-        console.log(my_object);  // check it out on the console  
-    }
-
-    // objects are copied by reference
-    copied_object = my_object;
-    copied_object.subject = "autonomous_robotics";  // what is my_object.subject on the console?
-
-    my_array = [8, 6, 7, 5, 3, 0, 9]; 
-    my_array[6] = 'ni-i-i-ine';
-    var i;  // local variable
-    for (i=0;i<my_array.length;i++) {
-        console.log(my_array[i]);
-    }
-
     textbar = document.createElement('div');
     textbar.style.position = 'absolute';
     //textbar.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
@@ -175,15 +156,21 @@ function init_robot_joints() {
             robot.links[joint_parent].child = [x]
         else
             robot.links[joint_parent].child.push(x)
-
-
-        if ( robot.links[joint_child].parent == undefined )
-            robot.links[joint_child].parent = [x]
-        else
-            robot.links[joint_child].parent.push(x)
+        
+        robot.links[joint_child].parent = x
     }
 
     console.log(robot.links)
+	
+	mt1 = [[1,1],[2,2]];
+	mt2 = [[1,0],[0,1]];
+	
+	//mt = matrix_multiply(mt1, mt2);
+	mt = matrix_transpose([[1,2,3],[4,5,6]]);
+	//console.log(mt);
+	
+	console.log(generate_identity(3));
+	
 
     // CS148: do not remove, this is used to create threejs geometries
     init_robot_joints_geoms();
