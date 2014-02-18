@@ -42,14 +42,16 @@
  
 <!-- 3jsbot includes -->
 <script src="3jsbot.js"></script> 
+
+<script src="3jsbot_forward_kinematics.js"></script>
+<script src="3jsbot_matrix.js"></script>
 <!--
-<script src="3jsbot_forward_kinematics.js"></script> 
 <script src="3jsbot_controls.js"></script> 
 <script src="3jsbot_pd_control.js"></script> 
 <script src="3jsbot_inverse_kinematics.js"></script> 
 <script src="3jsbot_potential_field.js"></script> 
-<script src="3jsbot_rrt_connect.js"></script> 
-<script src="3jsbot_matrix.js"></script> 
+<script src="3jsbot_rrt_connect.js"></script>
+
 <script src="3jsbot_quaternion.js"></script> 
 -->
 <script src="3jsbot_threejs.js"></script> 
@@ -162,10 +164,26 @@ function init_robot_joints() {
 
         // give the joint its name as an id
         robot.joints[x].name = x;
-        console.log(robot.joints[x].child); // to print the child link of joints for example
+        //console.log(robot.joints[x].parent)
+        //console.log(x)
+        //console.log(robot.joints[x].child); // to print the child link of joints for example
 
         // CONSTRUCT KINEMATIC HIERARCHY
+        joint_parent = robot.joints[x].parent
+        joint_child = robot.joints[x].child
+        if ( robot.links[joint_parent].child == undefined )
+            robot.links[joint_parent].child = [x]
+        else
+            robot.links[joint_parent].child.push(x)
+
+
+        if ( robot.links[joint_child].parent == undefined )
+            robot.links[joint_child].parent = [x]
+        else
+            robot.links[joint_child].parent.push(x)
     }
+
+    console.log(robot.links)
 
     // CS148: do not remove, this is used to create threejs geometries
     init_robot_joints_geoms();
