@@ -34,11 +34,15 @@
 
 <!-- definition of robot kinematics -->
 <!-- CS148: change this script pointer to change the robot definition -->
+
+
+<script src="robots/robot_br2.js"></script>  
+
 <!--
 <script src="robots/robot_urdf_example.js"></script> 
-<script src="robots/robot_crawler.js"></script> 
+<script src="robots/robot_crawler.js"></script>
+
 -->
-<script src="robots/robot_br2.js"></script> 
  
 <!-- 3jsbot includes -->
 <script src="3jsbot.js"></script> 
@@ -72,7 +76,7 @@ init();
 animate();
 
 
-
+var flag = true;
 // CS148: my_animate is where your robot's controls and movement are updated over time
 function my_init() {
 
@@ -82,7 +86,8 @@ function my_init() {
 
     var local_spacing = 0.9;  // variables declared with "var" are local 
     global_spacing = 0.9;  // variables declared with "var" are global
-    verti_dis = 0.0
+    verti_dis = 0.0;
+  
 
     textbar = document.createElement('div');
     textbar.style.position = 'absolute';
@@ -152,26 +157,17 @@ function init_robot_joints() {
         // CONSTRUCT KINEMATIC HIERARCHY
         joint_parent = robot.joints[x].parent
         joint_child = robot.joints[x].child
-        if ( robot.links[joint_parent].child == undefined )
-            robot.links[joint_parent].child = [x]
+        if ( robot.links[joint_parent].children == undefined )
+            robot.links[joint_parent].children = [x]
         else
-            robot.links[joint_parent].child.push(x)
+            robot.links[joint_parent].children.push(x)
         
         robot.links[joint_child].parent = x
     }
 
-    console.log(robot.links)
+    //console.log(robot.links);
+	//console.log(robot.joints);
 	
-	mt1 = [[1,1],[2,2]];
-	mt2 = [[1,0],[0,1]];
-	
-	//mt = matrix_multiply(mt1, mt2);
-	mt = matrix_transpose([[1,2,3],[4,5,6]]);
-	//console.log(mt);
-	
-	console.log(generate_identity(3));
-	
-
     // CS148: do not remove, this is used to create threejs geometries
     init_robot_joints_geoms();
 }
@@ -241,7 +237,6 @@ function my_animate() {
     }
 
 
-
     // CS148: INITIAL GETTING FAMILIAR CODE  (END)
 
  
@@ -253,7 +248,7 @@ function my_animate() {
     // DRAW ROBOT 
 
     // forward kinematics over robot links
-    //robot_forward_kinematics();
+    robot_forward_kinematics();
 
     // HANDLE USER CONTROLS
 

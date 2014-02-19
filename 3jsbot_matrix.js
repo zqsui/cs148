@@ -53,6 +53,22 @@ function matrix_transpose(mt)
 	return mtt;
 }
 
+function vector_normalize(vec)
+{
+	sum = 0;
+	for(var i = 0 ; i < vec.length ; i++)
+		sum += vec[i];
+	for(var i = 0 ; i < vec.length ; i++)
+		vec[i] = vec[i]/sum;
+	
+	return vec;
+}
+
+function vector_cross(vec1, vec2)
+{
+	
+}
+
 function generate_identity(n)
 {
 	mt = [];
@@ -68,7 +84,57 @@ function generate_identity(n)
 	return mt;
 }
 
-function generate_translation_matrix(t1, t2)
+function generate_translation_matrix(x, y, z)
 {
-	return matrix_multiply(t1, t2);
+	mt = [
+		 [1, 0, 0, x],
+		 [0, 1, 0, y],
+		 [0, 0, 1, z],
+		 [0, 0, 0, 1]
+	];
+	
+	return mt;
+}
+
+function generate_rotation_matrix(theta_x, theta_y, theta_z)
+{
+	rx = generate_rotation_matrix_X(theta_x);
+	ry = generate_rotation_matrix_Y(theta_y);
+	rz = generate_rotation_matrix_Z(theta_z);
+	
+	return matrix_multiply(matrix_multiply(rx, ry), rz);
+}
+
+function generate_rotation_matrix_X(theta_x)
+{
+	mtx =	[
+			[1, 0, 0, 0], 
+			[0, Math.cos(theta_x), -Math.sin(theta_x), 0],
+			[0, Math.sin(theta_x), Math.cos(theta_x), 0],
+			[0, 0, 0, 1]
+		];
+			
+	return mtx;
+}
+
+function generate_rotation_matrix_Y(theta_y)
+{
+	mty = [
+			[Math.cos(theta_y), 0, Math.sin(theta_y), 0], 
+			[0, 1, 0, 0],
+			[-Math.sin(theta_y), 0, Math.cos(theta_y), 0],
+			[0, 0, 0, 1]
+		];
+	return mty;
+}
+
+function generate_rotation_matrix_Z(theta_z)
+{
+	mtz =[
+			[Math.cos(theta_z), -Math.sin(theta_z), 0, 0], 
+			[Math.sin(theta_z), Math.cos(theta_z), 0, 0],
+			[0, 0, 1, 0],
+			[0, 0, 0, 1]
+		];
+	return mtz;
 }
