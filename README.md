@@ -1,4 +1,4 @@
-cs148
-=====
+3jsbot
+======
 
-projects for cs148
+Implementation of robot kinematics, control, and decision making in HTML5/JavaScript and threejs
