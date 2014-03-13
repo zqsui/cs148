@@ -16,6 +16,17 @@ generate_rotation_matrix_Y
 generate_rotation_matrix_Z
 */
 
+function vectortomatrix(vec)
+{
+	mt = [
+		 [1, 0, 0, vec[0][0]],
+		 [0, 1, 0, vec[1][0]],
+		 [0, 0, 1, vec[2][0]],
+		 [0, 0, 0, 1]
+	];
+	return mt;
+}
+
 
 function matrix_multiply(mt1, mt2)
 {
@@ -42,6 +53,7 @@ function matrix_transpose(mt)
 	m = mt[0].length;
 	mtt = [];
 	
+	//console.log(mt);
 	for (var i = 0 ; i < m; i++)
 	{
 		mtt[i] = [];
@@ -50,6 +62,9 @@ function matrix_transpose(mt)
 			mtt[i][j] = mt[j][i];
 		}
 	}
+
+
+
 	return mtt;
 }
 
@@ -66,7 +81,12 @@ function vector_normalize(vec)
 
 function vector_cross(vec1, vec2)
 {
-	
+	vec = [];
+	vec[0] = vec1[1]*vec2[2] - vec1[2]*vec2[1];
+	vec[1] = vec1[2]*vec2[0] - vec1[0]*vec2[2];
+	vec[2] = vec1[0]*vec2[1] - vec1[1]*vec2[0];
+
+	return vec;
 }
 
 function generate_identity(n)

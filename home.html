@@ -36,12 +36,12 @@
 <!-- CS148: change this script pointer to change the robot definition -->
 
 
-<script src="robots/robot_br2.js"></script>  
 
-<!--
 <script src="robots/robot_urdf_example.js"></script> 
-<script src="robots/robot_crawler.js"></script>
+<!--
 
+<script src="robots/robot_crawler.js"></script>
+<script src="robots/robot_br2.js"></script> 
 -->
  
 <!-- 3jsbot includes -->
@@ -49,15 +49,18 @@
 
 <script src="3jsbot_forward_kinematics.js"></script>
 <script src="3jsbot_matrix.js"></script>
-<!--
 <script src="3jsbot_controls.js"></script> 
 <script src="3jsbot_pd_control.js"></script> 
+<!--
+
+
 <script src="3jsbot_inverse_kinematics.js"></script> 
 <script src="3jsbot_potential_field.js"></script> 
 <script src="3jsbot_rrt_connect.js"></script>
 
-<script src="3jsbot_quaternion.js"></script> 
+
 -->
+<script src="3jsbot_quaternion.js"></script> 
 <script src="3jsbot_threejs.js"></script> 
 <script src="3jsbot_userinput.js"></script> 
 
@@ -170,6 +173,7 @@ function init_robot_joints() {
 	
     // CS148: do not remove, this is used to create threejs geometries
     init_robot_joints_geoms();
+
 }
 
 
@@ -243,7 +247,7 @@ function my_animate() {
     // ROBOT DYNAMICS 
 
     // apply robot controls to robot configuration (assuming pure kinematics for now)
-    //robot_apply_controls();
+    robot_apply_controls();
 
     // DRAW ROBOT 
 
@@ -258,11 +262,11 @@ function my_animate() {
     // UPDATE AUTONOMOUS CONTROLS 
 
     // proportional-derivative control 
-    /*
+    
     if (update_pd)
         robot_pd_control();
     update_pd = false;
-    */
+    
 
     // inverse kinematics
     //robot_inverse_kinematics(ik_target, "forearm_right_yaw", ik_local);

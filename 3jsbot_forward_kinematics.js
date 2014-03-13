@@ -29,10 +29,42 @@ function robot_forward_kinematics()
 	//calculate global position and orientation of robot
 	T = generate_translation_matrix(robot.origin.xyz[0], robot.origin.xyz[1], robot.origin.xyz[2]);
 	R = generate_rotation_matrix(robot.origin.rpy[0], robot.origin.rpy[1], robot.origin.rpy[2]);
-	
+
 	mstack.push(matrix_multiply(matrix_multiply(I, T), R));
 	
 	robot.origin.xform = mstack[mstack.length-1];
+
+
+	var heading_local = [[1],[0],[0],[1]];
+	//var heading_local = [1,0,0,1];
+	//console.log(heading_local);
+	robot_heading = matrix_multiply(robot.origin.xform, heading_local);
+
+	//console.log(robot_heading);
+	var heading_mat = matrix_2Darray_to_threejs(vectortomatrix(robot_heading));
+
+	var lateral_local = [[0],[0],[1],[1]];
+	//console.log(heading_local);
+	robot_lateral = matrix_multiply(robot.origin.xform, lateral_local);
+	//console.log(robot_heading);
+	var lateral_mat = matrix_2Darray_to_threejs(vectortomatrix(robot_lateral));
+
+	 if (typeof heading_geom === 'undefined') {
+            var temp_geom = new THREE.CubeGeometry(0.3, 0.3, 0.3);
+            var temp_material = new THREE.MeshBasicMaterial( {color: 0x00ffff} )
+            heading_geom = new THREE.Mesh(temp_geom, temp_material);
+            scene.add(heading_geom);
+        }
+        if (typeof lateral_geom === 'undefined') {
+            var temp_geom = new THREE.CubeGeometry(0.3, 0.3, 0.3);
+            var temp_material = new THREE.MeshBasicMaterial( {color: 0x008888} )
+            lateral_geom = new THREE.Mesh(temp_geom, temp_material); 
+            scene.add(lateral_geom);
+        }
+
+
+	simpleApplyMatrix(heading_geom, heading_mat);
+	simpleApplyMatrix(lateral_geom, lateral_mat);
 	
 	stack = [];
 	
@@ -61,7 +93,9 @@ function robot_forward_kinematics()
 		//calculate the corresponding translation matrix
 		T = generate_translation_matrix(robot.joints[pjoint].origin.xyz[0], robot.joints[pjoint].origin.xyz[1], robot.joints[pjoint].origin.xyz[2]);
 		R = generate_rotation_matrix(robot.joints[pjoint].origin.rpy[0], robot.joints[pjoint].origin.rpy[1], robot.joints[pjoint].origin.rpy[2]);
-		mstack.push(matrix_multiply(matrix_multiply(mstack[mstack.length-1], T), R));
+		quaternion = quaternion_from_axisangle(robot.joints[pjoint].axis, robot.joints[pjoint].angle);
+		R_axis = quaternion_to_rotation_matrix(quaternion);
+		mstack.push(matrix_multiply(matrix_multiply(matrix_multiply(mstack[mstack.length-1], T), R),R_axis));
 		
 		//set joint transform
 		robot.joints[pjoint].origin.xform = mstack[mstack.length-1];
