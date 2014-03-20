@@ -6,7 +6,11 @@
  github will translate 'Assignment 1' into 'Assignment-1'. Please use 'Assignment-X' for branching of Assignment X
  branch lables are case sensitive
  comment: branch now found properly 
+ 
  Assignment 2: CHECK 
  good work 
+ 
+ Assignment 3: CHECK 
+ comment: servo overstiff, with overshooting and minor oscillation
  
 
