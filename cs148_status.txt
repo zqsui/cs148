@@ -13,4 +13,9 @@
  Assignment 3: CHECK 
  comment: servo overstiff, with overshooting and minor oscillation
  
+ Assignment 4: UNCHECKED
+ error: only base link displayed for test cases
+ error: controls incorrectly applied; not zeroing after iteration?
+ error: quaternion rotation error for urdf_example test
+ 
 
