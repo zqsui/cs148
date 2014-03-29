@@ -25,7 +25,9 @@ function robot_apply_controls() {
 	robot.origin.rpy[2] += robot.control.rpy[2];  
 
 	for (x in robot.joints) {
+		//robot.joints[x].angle = 0
 		robot.joints[x].angle += robot.joints[x].control;
+		robot.joints[x].control = 0
 	}
 
 }

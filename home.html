@@ -36,12 +36,13 @@
 <!-- CS148: change this script pointer to change the robot definition -->
 
 
-
 <script src="robots/robot_urdf_example.js"></script> 
 <!--
+<script src="robots/robot_br2.js"></script> 
+
+
 
 <script src="robots/robot_crawler.js"></script>
-<script src="robots/robot_br2.js"></script> 
 -->
  
 <!-- 3jsbot includes -->
@@ -136,6 +137,12 @@ function init_robot_links() {
 
     // initialize controls for robot base link
     robot.control = {xyz: [0,0,0], rpy:[0,0,0]}; 
+
+    for ( x in robot.joints){
+        robot.joints[x].angle = 0;
+        robot.joints[x].control = 0;
+        robot.joints[x].servo = {p_desired:0.0, gains:0.01};
+    }
 }
 
 
