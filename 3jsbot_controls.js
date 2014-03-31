@@ -27,8 +27,13 @@ function robot_apply_controls() {
 	for (x in robot.joints) {
 		//robot.joints[x].angle = 0
 		robot.joints[x].angle += robot.joints[x].control;
-		robot.joints[x].control = 0
+		robot.joints[x].control = 0;
 	}
+
+    robot.control.xyz[2] = 0;
+    robot.control.xyz[0] = 0;
+    robot.control.rpy[0] = 0;
+    robot.control.rpy[1] = 0;
 
 }
 
