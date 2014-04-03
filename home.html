@@ -34,24 +34,33 @@
 
 <!-- definition of robot kinematics -->
 <!-- CS148: change this script pointer to change the robot definition -->
+
+
+<script src="robots/robot_br2.js"></script>
 <!--
-<script src="robots/robot_urdf_example.js"></script> 
-<script src="robots/robot_crawler.js"></script> 
+
+<script src="robots/robot_urdf_example.js"></script>
+
+<script src="robots/robot_crawler.js"></script>
 -->
-<script src="robots/robot_br2.js"></script> 
  
 <!-- 3jsbot includes -->
 <script src="3jsbot.js"></script> 
-<!--
-<script src="3jsbot_forward_kinematics.js"></script> 
+
+<script src="3jsbot_forward_kinematics.js"></script>
+<script src="3jsbot_matrix.js"></script>
 <script src="3jsbot_controls.js"></script> 
 <script src="3jsbot_pd_control.js"></script> 
+<!--
+
+
 <script src="3jsbot_inverse_kinematics.js"></script> 
 <script src="3jsbot_potential_field.js"></script> 
-<script src="3jsbot_rrt_connect.js"></script> 
-<script src="3jsbot_matrix.js"></script> 
-<script src="3jsbot_quaternion.js"></script> 
+<script src="3jsbot_rrt_connect.js"></script>
+
+
 -->
+<script src="3jsbot_quaternion.js"></script> 
 <script src="3jsbot_threejs.js"></script> 
 <script src="3jsbot_userinput.js"></script> 
 
@@ -70,7 +79,7 @@ init();
 animate();
 
 
-
+var flag = true;
 // CS148: my_animate is where your robot's controls and movement are updated over time
 function my_init() {
 
@@ -80,25 +89,8 @@ function my_init() {
 
     var local_spacing = 0.9;  // variables declared with "var" are local 
     global_spacing = 0.9;  // variables declared with "var" are global
-
-    my_object = {};  // objects can be created with braces
-    my_object.university = "Brown";  // create object property with an assignment
-    my_object.course_number = 148;  
-    my_object["subject"] = "robotics";  
-    if (typeof copied_object === 'undefined') {  // if my_object does not already exist
-        console.log(my_object);  // check it out on the console  
-    }
-
-    // objects are copied by reference
-    copied_object = my_object;
-    copied_object.subject = "autonomous_robotics";  // what is my_object.subject on the console?
-
-    my_array = [8, 6, 7, 5, 3, 0, 9]; 
-    my_array[6] = 'ni-i-i-ine';
-    var i;  // local variable
-    for (i=0;i<my_array.length;i++) {
-        console.log(my_array[i]);
-    }
+    verti_dis = 0.0;
+  
 
     textbar = document.createElement('div');
     textbar.style.position = 'absolute';
@@ -144,6 +136,12 @@ function init_robot_links() {
 
     // initialize controls for robot base link
     robot.control = {xyz: [0,0,0], rpy:[0,0,0]}; 
+
+    for ( x in robot.joints){
+        robot.joints[x].angle = 0;
+        robot.joints[x].control = 0;
+        robot.joints[x].servo = {p_desired:0.0, gains:0.01};
+    }
 }
 
 
@@ -161,13 +159,27 @@ function init_robot_joints() {
 
         // give the joint its name as an id
         robot.joints[x].name = x;
-        console.log(robot.joints[x].child); // to print the child link of joints for example
+        //console.log(robot.joints[x].parent)
+        //console.log(x)
+        //console.log(robot.joints[x].child); // to print the child link of joints for example
 
         // CONSTRUCT KINEMATIC HIERARCHY
+        joint_parent = robot.joints[x].parent
+        joint_child = robot.joints[x].child
+        if ( robot.links[joint_parent].children == undefined )
+            robot.links[joint_parent].children = [x]
+        else
+            robot.links[joint_parent].children.push(x)
+        
+        robot.links[joint_child].parent = x
     }
 
+    //console.log(robot.links);
+	//console.log(robot.joints);
+	
     // CS148: do not remove, this is used to create threejs geometries
     init_robot_joints_geoms();
+
 }
 
 
@@ -180,15 +192,28 @@ function init_robot_joints() {
 function my_animate() {
 
     // CS148: INITIAL GETTING FAMILIAR CODE  (START HERE)
+    var dis = Math.random()*0.02
 
     // keyboard is threejs helper for reading keyboard state
-    if (keyboard.pressed("x")) 
+    if (keyboard.pressed("x")) {
         textbar.innerHTML = "moving up";  // make the pieces move up
-    else if (keyboard.pressed("z")) 
-        textbar.innerHTML = "zzzzzz";  // stop jittering the pieces
-    else {
-        // make the pieces jitter, and say something interesting
+        verti_dis += 0.02
+
     }
+    else if (keyboard.pressed("c")) {
+        textbar.innerHTML = "moving down";  // make the pieces move down
+        verti_dis -= 0.02
+
+    }
+    else if (keyboard.pressed("z")) {
+        textbar.innerHTML = "zzzzzz";  // stop jittering the pieces
+        dis = 0
+
+    }
+    else {
+    // make the pieces jitter, and say something interesting
+    }
+
 
     // jsmat is how we will represent matrices with index notation
     // such that matrix[row][column] is the indexing
@@ -196,29 +221,30 @@ function my_animate() {
                 [1, 0, 0, 0],
                 [0, 1, 0, 0],
                 [0, 0, 1, 0],
-                [0, 0, 0, 1] 
+                [0, 0, 0, 1]
     ];
 
-    var spacing = 0.9;  // variables declared with "var" are local 
+    var spacing = 0.9;  // variables declared with "var" are local
 
     // dirty way to get number of keys in an object
-    jsmat[0][3] = -Object.keys(robot.joints).length*spacing/2;  
+    jsmat[0][3] = -Object.keys(robot.joints).length*spacing/2;
+
     for (x in robot.joints) {
-        jsmat[1][3] = 2+Math.random()*0.02;  // Math object has lots of helpful functions
-        jsmat[2][3] = Math.random()*0.02;
-        threemat = matrix_2Darray_to_threejs(jsmat); 
+        jsmat[1][3] = 2 + dis + verti_dis // Math object has lots of helpful functions
+        jsmat[2][3] = dis
+        threemat = matrix_2Darray_to_threejs(jsmat);
         simpleApplyMatrix(robot.joints[x].geom,threemat);
         jsmat[0][3] += spacing;
-    } 
+    }
 
     jsmat[0][3] = -Object.keys(robot.joints).length*spacing/2;
     for (x in robot.links) {
-        jsmat[1][3] = 1+Math.random()*0.02;
-        jsmat[2][3] = Math.random()*0.02;
+        jsmat[1][3] = 1 + dis + verti_dis
+        jsmat[2][3] = dis
         threemat = matrix_2Darray_to_threejs(jsmat);
         simpleApplyMatrix(robot.links[x].geom,threemat);
         jsmat[0][3] += spacing;
-    } 
+    }
 
 
     // CS148: INITIAL GETTING FAMILIAR CODE  (END)
@@ -227,12 +253,12 @@ function my_animate() {
     // ROBOT DYNAMICS 
 
     // apply robot controls to robot configuration (assuming pure kinematics for now)
-    //robot_apply_controls();
+    robot_apply_controls();
 
     // DRAW ROBOT 
 
     // forward kinematics over robot links
-    //robot_forward_kinematics();
+    robot_forward_kinematics();
 
     // HANDLE USER CONTROLS
 
@@ -242,11 +268,11 @@ function my_animate() {
     // UPDATE AUTONOMOUS CONTROLS 
 
     // proportional-derivative control 
-    /*
+    
     if (update_pd)
         robot_pd_control();
     update_pd = false;
-    */
+    
 
     // inverse kinematics
     //robot_inverse_kinematics(ik_target, "forearm_right_yaw", ik_local);
