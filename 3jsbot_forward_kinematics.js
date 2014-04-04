@@ -95,11 +95,13 @@ function robot_forward_kinematics()
 		R = generate_rotation_matrix(robot.joints[pjoint].origin.rpy[0], robot.joints[pjoint].origin.rpy[1], robot.joints[pjoint].origin.rpy[2]);
 		quaternion = quaternion_from_axisangle(robot.joints[pjoint].axis, robot.joints[pjoint].angle);
 		R_axis = quaternion_to_rotation_matrix(quaternion);
-		mstack.push(matrix_multiply(matrix_multiply(matrix_multiply(mstack[mstack.length-1], T), R),R_axis));
+		var tmp = matrix_multiply(matrix_multiply(mstack[mstack.length-1], T), R);
+		robot.joints[pjoint].xxform = tmp;
+		mstack.push(matrix_multiply(tmp, R_axis));
 		
 		//set joint transform
 		robot.joints[pjoint].origin.xform = mstack[mstack.length-1];
-		robot.joints[pjoint].xform = robot.joints[pjoint].origin.xform;			
+		robot.joints[pjoint].xform = robot.joints[pjoint].origin.xform;		
 		compute_and_draw_heading(robot.joints[pjoint]);
 		
 		//set link transform

@@ -28,13 +28,59 @@ function vectortomatrix(vec)
 }
 
 
+function postomatrix(pos)
+{
+	mt = [
+	 	 [1, 0, 0, pos[0]],
+		 [0, 1, 0, pos[1]],
+		 [0, 0, 1, pos[2]],
+		 [0, 0, 0, 1]
+	];
+
+	return mt;
+}
+
+function matrixtovector(mt)
+{
+	vec = [mt[0][0], mt[1][0], mt[2][0]];
+
+	return vec;
+}
+
+function matrixtovector1(mt)
+{
+	vec = [mt[0][3], mt[1][3], mt[2][3]];
+
+	return vec;
+}
+
+function vector_substraction(vec1, vec2)
+{
+	vec = [vec1[0]-vec2[0], vec1[1]-vec2[1], vec1[2]-vec2[2]];
+	return vec;
+}
+
+function matrix_multiply_constant(mt, c)
+{
+	for (var i = 0; i < mt.length; i++)
+	{
+		for (var j = 0; j < mt[0].length; j++ )
+			mt[i][j] = mt[i][j] * c;
+	}
+	return mt;
+}
+
+
 function matrix_multiply(mt1, mt2)
 {
+	var flag = false;
+	//if ( mt2.length == 4 && mt2[0].length == 6) flag = true;
 	mt = [];
 	for (var i = 0; i < mt1.length; i++)
 	{
 		tmp = [];
-		for (var j = 0; j < mt2[i].length; j++)
+		//if (flag) console.log(i);
+		for (var j = 0; j < mt2[0].length; j++)
 		{
 			sum = 0;
 			for (var k = 0; k < mt2.length; k++) 
@@ -113,6 +159,18 @@ function generate_translation_matrix(x, y, z)
 		 [0, 0, 0, 1]
 	];
 	
+	return mt;
+}
+
+function clean_rotation_matrix(mt)
+{
+	mt = [
+		 [mt[0][0], mt[0][1], mt[0][2], 0],
+		 [mt[1][0], mt[1][1], mt[1][2], 0],
+		 [mt[2][0], mt[2][1], mt[2][2], 0],
+		 [0, 0, 0, 1]
+	];
+
 	return mt;
 }
 

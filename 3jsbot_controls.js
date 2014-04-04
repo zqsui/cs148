@@ -30,10 +30,12 @@ function robot_apply_controls() {
 		robot.joints[x].control = 0;
 	}
 
-    robot.control.xyz[2] = 0;
     robot.control.xyz[0] = 0;
+    robot.control.xyz[1] = 0;
+    robot.control.xyz[2] = 0;
     robot.control.rpy[0] = 0;
     robot.control.rpy[1] = 0;
+    robot.control.rpy[2] = 0;
 
 }
 

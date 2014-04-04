@@ -51,10 +51,11 @@
 <script src="3jsbot_matrix.js"></script>
 <script src="3jsbot_controls.js"></script> 
 <script src="3jsbot_pd_control.js"></script> 
+
+<script src="3jsbot_inverse_kinematics.js"></script>
+
 <!--
 
-
-<script src="3jsbot_inverse_kinematics.js"></script> 
 <script src="3jsbot_potential_field.js"></script> 
 <script src="3jsbot_rrt_connect.js"></script>
 
@@ -257,6 +258,9 @@ function my_animate() {
 
     // DRAW ROBOT 
 
+    endeffector_joint = "forearm_right_yaw";
+    endeffector_local_pos = [[0],[0],[0.5],[1]];
+
     // forward kinematics over robot links
     robot_forward_kinematics();
 
@@ -271,11 +275,12 @@ function my_animate() {
     
     if (update_pd)
         robot_pd_control();
-    update_pd = false;
-    
+    update_pd = false;    
 
+    //update_ik = true;
+    
     // inverse kinematics
-    //robot_inverse_kinematics(ik_target, "forearm_right_yaw", ik_local);
+    robot_inverse_kinematics(ik_target, endeffector_joint, endeffector_local_pos);
 
     // configuration space motion planning
     //robot_rrt_connect(q_desired);
