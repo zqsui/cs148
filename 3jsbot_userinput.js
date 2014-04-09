@@ -69,13 +69,13 @@ function user_input() {
         robot.control.xyz[2] += -0.1 * (robot_heading[2][0]-robot.origin.xyz[2]);
         robot.control.xyz[0] += -0.1 * (robot_heading[0][0]-robot.origin.xyz[0]);
     }
-    if ( keyboard.pressed("a") ) {  // strafe
+    if ( keyboard.pressed("d") ) {  // strafe
         //robot.origin.xyz[0] += 0.1; // simple but ineffective: not aligned with robot
 
         robot.control.xyz[2] += 0.1 * (robot_lateral[2][0]-robot.origin.xyz[2]);
         robot.control.xyz[0] += 0.1 * (robot_lateral[0][0]-robot.origin.xyz[0]);
     }
-    if ( keyboard.pressed("s") ) {  // strafe
+    if ( keyboard.pressed("a") ) {  // strafe
          //robot.origin.xyz[0] -= 0.1; // simple but ineffective: not aligned with robot
 
         robot.control.xyz[2] += -0.1 * (robot_lateral[2][0]-robot.origin.xyz[2]);
