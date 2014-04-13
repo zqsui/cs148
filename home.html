@@ -140,7 +140,7 @@ function init_robot_links() {
     for ( x in robot.joints){
         robot.joints[x].angle = 0;
         robot.joints[x].control = 0;
-        robot.joints[x].servo = {p_desired:0.0, gains:0.01};
+        robot.joints[x].servo = {p_desired:0.0, gains:0.1};
     }
 }
 
