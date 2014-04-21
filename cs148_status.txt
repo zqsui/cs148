@@ -13,10 +13,15 @@
  Assignment 3: CHECK 
  comment: servo overstiff, with overshooting and minor oscillation
  
- Assignment 4: UNCHECKED
+ Assignment 4: CHECK
  error: only base link displayed for test cases
  error: controls incorrectly applied; not zeroing after iteration?
  error: quaternion rotation error for urdf_example test
  regrade: robots displayed properly; quaternion rotation working; base control goes unstable
+ regrade2: working properly
+ warning: PD clock motion has some artifacts, but nothing significant
+ 
+ Assignment 5: CHECK
+ good work
  
 
