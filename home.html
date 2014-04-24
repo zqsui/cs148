@@ -57,10 +57,20 @@
 <!--
 
 <script src="3jsbot_potential_field.js"></script> 
-<script src="3jsbot_rrt_connect.js"></script>
+
 
 
 -->
+<script src="3jsbot_rrt_connect.js"></script>
+<script src="3jsbot_collision.js"></script> 
+<script src="worlds/world_basic.js"></script>
+<!--
+<script src="worlds/world_empty.js"></script>
+<script src="worlds/world_random.js"></script>
+<script src="worlds/world_local_minima.js"></script>
+<script src="worlds/world_s.js"></script>
+-->
+
 <script src="3jsbot_quaternion.js"></script> 
 <script src="3jsbot_threejs.js"></script> 
 <script src="3jsbot_userinput.js"></script> 
@@ -281,6 +291,10 @@ function my_animate() {
     
     // inverse kinematics
     robot_inverse_kinematics(ik_target, endeffector_joint, endeffector_local_pos);
+
+    robot_set_planning_scene();
+
+    robot_iscollision();
 
     // configuration space motion planning
     //robot_rrt_connect(q_desired);
