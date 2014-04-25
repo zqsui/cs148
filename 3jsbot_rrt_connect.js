@@ -89,6 +89,8 @@ function random_config(){
 
     for( var i = 0 ; i < q_random_config.length; i++ )
         q_random_config[i] = Math.random() * value_domain[i];
+    q_random_config[0] += robot_boundary[0][0];
+    q_random_config[2] += robot_boundary[0][2];
 
     while (robot_collision_test(q_random_config)){
 
