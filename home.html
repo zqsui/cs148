@@ -63,14 +63,15 @@
 -->
 <script src="3jsbot_rrt_connect.js"></script>
 <script src="3jsbot_collision.js"></script> 
-<script src="worlds/world_basic.js"></script>
+
 <!--
+    <script src="worlds/world_basic.js"></script>
 <script src="worlds/world_empty.js"></script>
 <script src="worlds/world_random.js"></script>
 <script src="worlds/world_local_minima.js"></script>
 <script src="worlds/world_s.js"></script>
 -->
-
+<script src="worlds/world_s.js"></script>
 <script src="3jsbot_quaternion.js"></script> 
 <script src="3jsbot_threejs.js"></script> 
 <script src="3jsbot_userinput.js"></script> 
@@ -116,6 +117,7 @@ function my_init() {
     document.body.appendChild(textbar);
 
     // CS148: INITIAL GETTING FAMILIAR CODE  (END HERE)
+    robot_set_planning_scene();
 
 }
 
@@ -132,6 +134,10 @@ function init_robot() {
 
     // initialize inverse kinematics target location 
     ik_target = [[0],[0.8],[1.0],[1]];
+
+    generating_motion_plan = false;
+    generate_motion_plan = false;
+    robot_path_traverse_idx = 0;
 
 }
 
@@ -292,9 +298,26 @@ function my_animate() {
     // inverse kinematics
     robot_inverse_kinematics(ik_target, endeffector_joint, endeffector_local_pos);
 
-    robot_set_planning_scene();
-
     robot_iscollision();
+
+
+    // configuration space motion planning
+    if ((generate_motion_plan) && (!generating_motion_plan)) {
+        robot_rrt_planner_init();
+        generating_motion_plan = true;
+        generate_motion_plan = false;
+    }
+    if (generating_motion_plan) {
+        //robot_rrt_connect(q_desired);
+        rrt_result = robot_rrt_planner_iterate();
+        if (rrt_result === "Reached") {
+            //alert("home: reached");
+            generating_motion_plan = false;
+        }
+    }
+
+    //requestID = requestAnimationFrame(cl); 
+    //console.log(requestID);
 
     // configuration space motion planning
     //robot_rrt_connect(q_desired);
@@ -309,6 +332,9 @@ function my_animate() {
 
 
 }
+
+function cl()
+{}
 
 
 
