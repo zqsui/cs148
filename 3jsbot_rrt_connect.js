@@ -60,7 +60,7 @@ function robot_rrt_planner_init() {
     for ( var i = 6 ; i < q_start_config.length; i++)
         value_domain[i] = 2 * Math.PI;
 
-    q_start_config = random_config();
+    //q_start_config = random_config();
     
     console.log(q_start_config);
 
@@ -92,11 +92,12 @@ function random_config(){
     q_random_config[0] += robot_boundary[0][0];
     q_random_config[2] += robot_boundary[0][2];
 
+    /*
     while (robot_collision_test(q_random_config)){
 
         for( var i = 0 ; i < q_random_config.length; i++ )
             q_random_config[i] = Math.random() * value_domain[i];
-    }
+    }*/
 
     return q_random_config
 }
@@ -158,24 +159,43 @@ function nearest_neighbor(T, q)
 
 function new_config(q, q_near, q_new)
 {
-    eps = 0.2
+    var eps = 1.5
 
-    diff = new Array(q_start_config.length);
+    var diff = new Array(q_start_config.length);
 
     for ( var i = 0 ; i < diff.length ; i++ )
         diff[i] = q[i] - q_near[i]
 
-    for ( var i = 0 ; i < q_new.length ; i++ )
-        q_new[i] = q_near[i] + eps * diff[i]
 
-    //window.cancelAnimationFrame(requestID+1);
-    if ( robot_collision_test(q_new) )
-        return false
+    for (var j = 1 ; j <= 10 ; j++ )
+    {
+        var vec_len = vector_length(diff);
+        if ( vec_len < eps )
+        {
+            vec_len = eps
+            /*for ( var i = 0 ; i < q_new.length ; i++ )
+                q_new[i] = q_near[i] + eps*/
+
+        }
+        
+        for ( var i = 0 ; i < q_new.length ; i++ )
+          q_new[i] = q_near[i] + eps * diff[i]/vec_len * j / 10;
+        
+
+      /*  for ( var i = 0 ; i < q_new.length ; i++ )
+            q_new[i] = q_near[i] + eps * diff[i]*/
+
+        //window.cancelAnimationFrame(requestID+1);
+        if ( robot_collision_test(q_new) )
+            return false
+    }
+    
     return true
+
 }
 
 function rrt_extend(T, q){
-    n_index = nearest_neighbor(T, q)
+    var n_index = nearest_neighbor(T, q)
     var q_near = T.vertices[n_index].vertex;
     q_new = new Array(q_start_config.length);
 
@@ -217,7 +237,9 @@ function rrt_connect(T, q){
     do
     {
         S = rrt_extend(T, q);
+        console.log(S);
     }while( S == "Advanced")
+    //console.log(S)
 
     return S
 }
@@ -232,7 +254,7 @@ function v_equal(q1, q2)
 
 function generate_path()
 {
-    index = meet_vertex_a;
+    var index = meet_vertex_a;
     while (index != 0)
     {
         robot_path.push(ta.vertices[index]);

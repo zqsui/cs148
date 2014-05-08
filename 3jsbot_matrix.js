@@ -116,7 +116,7 @@ function matrix_transpose(mt)
 
 function vector_normalize(vec)
 {
-	sum = 0;
+	var sum = 0;
 	for(var i = 0 ; i < vec.length ; i++)
 		sum += vec[i];
 	for(var i = 0 ; i < vec.length ; i++)
@@ -125,9 +125,19 @@ function vector_normalize(vec)
 	return vec;
 }
 
+function vector_length(vec)
+{
+	var sum = 0;
+
+	for(var i = 0 ; i < vec.length ; i++)
+		sum += vec[i]*vec[i];
+
+	return Math.sqrt(sum);
+}
+
 function vector_cross(vec1, vec2)
 {
-	vec = [];
+	var vec = [];
 	vec[0] = vec1[1]*vec2[2] - vec1[2]*vec2[1];
 	vec[1] = vec1[2]*vec2[0] - vec1[0]*vec2[2];
 	vec[2] = vec1[0]*vec2[1] - vec1[1]*vec2[0];
